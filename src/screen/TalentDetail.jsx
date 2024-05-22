@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     padding: 12,
-    marginBottom: 16,
+    marginBottom: 20,
   },
   downloadButtonText: {
     fontSize: 18,
