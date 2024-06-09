@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,65 +9,52 @@ import {
   StatusBar,
   Platform,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import SearchInput from "../components/SearchInput";
 import Header from "../components/Header";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-
-const seasons = [
-  {
-    id: "1",
-    title: "Bloomzon Talent Catch 2024 - Season 1",
-    period: "Jul - Oct 2024",
-  },
-  {
-    id: "2",
-    title: "Bloomzon Talent Catch 2025 - Season 2",
-    period: "Nov - Feb 2025",
-  },
-  {
-    id: "3",
-    title: "Bloomzon Talent Catch 2025 - Season 3",
-    period: "Mar - Aug 2025",
-  },
-  {
-    id: "4",
-    title: "Bloomzon Talent Catch 2026 - Season 4",
-    period: "Sep - Jan 2026",
-  },
-  {
-    id: "5",
-    title: "Bloomzon Talent Catch 2026 - Season 5",
-    period: "Feb - Jul 2026",
-  },
-  {
-    id: "6",
-    title: "Bloomzon Talent Catch 2026 - Season 6",
-    period: "Aug - Dec 2026",
-  },
-  { id: "7", title: "Grand Final", period: "Aug - Dec 2026" },
-];
+import { getVideos } from "../services/video";
+import StarRating from "../components/StarRating";
 
 const TalentCatchScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredSeasons, setFilteredSeasons] = useState(seasons);
+  // const [filteredSeasons, setFilteredSeasons] = useState([]);
+  const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleSearch = (text) => {
-    setSearchQuery(text);
-    if (text) {
-      const filteredData = seasons.filter((item) =>
-        item.title.toLowerCase().includes(text.toLowerCase())
-      );
-      setFilteredSeasons(filteredData);
-    } else {
-      setFilteredSeasons(seasons);
-    }
-  };
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        setLoading(true);
+        const data = await getVideos();
+        setVideos(data);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        setLoading(false);
+      }
+    };
+
+    fetchVideos();
+  }, []);
+
+  // const handleSearch = (text) => {
+  //   setSearchQuery(text);
+  //   if (text) {
+  //     const filteredData = videos.filter((item) =>
+  //       item.title.toLowerCase().includes(text.toLowerCase())
+  //     );
+  //     setFilteredSeasons(filteredData);
+  //   } else {
+  //     setFilteredSeasons(videos);
+  //   }
+  // };
 
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
       <TouchableOpacity
-        onPress={() => navigation.push("TalentDetail")}
+        onPress={() => navigation.push("TalentDetail", { id: item.id })}
         style={styles.thumb}
       >
         <Text style={styles.thumbText}>Talent Catch</Text>
@@ -77,7 +64,7 @@ const TalentCatchScreen = ({ navigation }) => {
       </TouchableOpacity>
       <View style={styles.textContainer}>
         <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.period}>{item.period}</Text>
+        <Text style={styles.period}>{item.season_number}</Text>
       </View>
       <TouchableOpacity style={styles.menuButton}>
         <MaterialCommunityIcons name="dots-vertical" size={24} color={"#999"} />
@@ -94,13 +81,27 @@ const TalentCatchScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Header navigation={navigation} />
-      <FlatList
-        data={filteredSeasons}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        style={{ padding: 20 }}
-        ListHeaderComponent={renderTitle}
-      />
+      {loading ? (
+        <ActivityIndicator />
+      ) : videos.length === 0 ? (
+        <Text
+          style={{
+            paddingHorizontal: 20,
+            paddingVertical: 40,
+            textAlign: "center",
+          }}
+        >
+          No vide available
+        </Text>
+      ) : (
+        <FlatList
+          data={videos}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          style={{ padding: 20 }}
+          ListHeaderComponent={renderTitle}
+        />
+      )}
     </View>
   );
 };

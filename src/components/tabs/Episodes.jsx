@@ -2,26 +2,19 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { MaterialIcons, AntDesign, Entypo } from "@expo/vector-icons";
 import React from "react";
 
-const episodes = [
-  { id: 1, title: "Episode 1", description: "Lorem ipsum" },
-  { id: 2, title: "Episode 2", description: "Lorem ipsum" },
-  { id: 3, title: "Episode 3", description: "Lorem ipsum" },
-  { id: 4, title: "Episode 4", description: "Lorem ipsum" },
-  { id: 5, title: "Episode 5", description: "Lorem ipsum" },
-  { id: 6, title: "Episode 6", description: "Lorem ipsum" },
-];
-
-const Episodes = () => {
+const Episodes = ({ video }) => {
   return (
     <View style={styles.episodeList}>
-      {episodes.map((episode) => (
+      {video.episodes.map((episode) => (
         <View key={episode.id} style={styles.episodeContainer}>
           <TouchableOpacity style={styles.episodePlayButton}>
             <MaterialIcons name="play-arrow" size={24} color="#ffffff" />
           </TouchableOpacity>
           <View style={styles.episodeInfo}>
-            <Text style={styles.episodeTitle}>{episode.title}</Text>
-            <Text style={styles.episodeDescription}>{episode.description}</Text>
+            <Text style={styles.episodeTitle}>
+              Episode {episode.episode_number}
+            </Text>
+            <Text style={styles.episodeDescription}>{episode.title}</Text>
           </View>
           <View style={styles.episodeActions}>
             <TouchableOpacity style={styles.episodeActionButton}>

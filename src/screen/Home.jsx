@@ -18,7 +18,7 @@ const Home = ({ navigation }) => {
       <Text style={styles.header}>Bloomzon Talent Catch Store</Text>
       <View style={styles.imageContainer}>
         <Image
-          source={{ uri: "https://example.com/flashlight.jpg" }} // Replace with your image URL
+          source={{ uri: "https://example.com/flashlight.jpg" }}
           style={styles.image}
         />
         <TouchableOpacity style={styles.playButton}>

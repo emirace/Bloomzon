@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import {
   MaterialIcons,
@@ -17,6 +18,8 @@ import Header from "../components/Header";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Episodes from "../components/tabs/Episodes";
 import More from "../components/tabs/More";
+import { getVideo } from "../services/video";
+import StarRating from "../components/StarRating";
 
 const iconData = [
   { id: "1", name: "replay", library: MaterialIcons, label: "Start over" },
@@ -33,8 +36,29 @@ const iconData = [
   { id: "7", name: "youtube", library: Feather, label: "YouTube" },
 ];
 
-const TalentDetail = ({ navigation }) => {
+const TalentDetail = ({ route, navigation }) => {
+  const { id } = route.params;
   const [activeTab, setActiveTab] = useState("Episodes");
+  const [video, setVideo] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedEpisode, setSelectedEpisode] = useState(1);
+
+  useEffect(() => {
+    const fetchVideo = async () => {
+      if (!id) return;
+      try {
+        setLoading(true);
+        const data = await getVideo(id);
+        setVideo(data);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        setLoading(false);
+      }
+    };
+
+    fetchVideo();
+  }, []);
 
   const renderItem = ({ item }) => {
     const IconComponent = item.library;
@@ -50,12 +74,14 @@ const TalentDetail = ({ navigation }) => {
     <View style={{ flex: 1 }}>
       <Header navigation={navigation} />
       <ScrollView style={styles.container}>
+        {loading && <ActivityIndicator />}
+        {!video && <Text>No video</Text>}
         <View style={styles.header}>
-          <Text style={styles.title}>Talent Catch</Text>
+          <Text style={styles.title}>{video.title}</Text>
         </View>
 
         <View style={styles.seasonContainer}>
-          <Text style={styles.seasonText}>Season 1</Text>
+          <Text style={styles.seasonText}>Season {video.season_number}</Text>
           <AntDesign name="down" size={16} color="black" />
         </View>
 
@@ -66,12 +92,16 @@ const TalentDetail = ({ navigation }) => {
 
         <TouchableOpacity style={styles.playButton}>
           <MaterialIcons name="play-arrow" size={24} color="white" />
-          <Text style={styles.playButtonText}>Play S1 E1</Text>
+          <Text style={styles.playButtonText}>
+            Play S{video.season_number} E{selectedEpisode}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.downloadButton}>
           <AntDesign name="download" size={24} color="#ef7204" />
-          <Text style={styles.downloadButtonText}>Download Season 1</Text>
+          <Text style={styles.downloadButtonText}>
+            Download Season {video.season_number}
+          </Text>
         </TouchableOpacity>
 
         <FlatList
@@ -83,13 +113,10 @@ const TalentDetail = ({ navigation }) => {
           contentContainerStyle={styles.iconRow}
         />
 
-        <Text style={styles.description}>
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-          nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-          sed diam voluptua...
-        </Text>
+        <Text style={styles.description}>{video.description}</Text>
 
         <View style={styles.ratingContainer}>
+          <StarRating rating={4} />
           <AntDesign name="star" size={16} color="#FFA500" />
           <AntDesign name="star" size={16} color="#FFA500" />
           <AntDesign name="star" size={16} color="#FFA500" />
@@ -142,8 +169,8 @@ const TalentDetail = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
         </View>
-        {activeTab === "Episodes" && <Episodes />}
-        {activeTab === "More" && <More />}
+        {activeTab === "Episodes" && <Episodes video={video} />}
+        {activeTab === "More" && <More video={video} />}
       </ScrollView>
     </View>
   );
