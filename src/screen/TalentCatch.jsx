@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     position: "relative",
     marginRight: 10,
   },
-  thumbText: { fontWeight: "600", fontSize: "20" },
+  thumbText: { fontWeight: "600", fontSize: 20 },
   playButton: {
     position: "absolute",
     bottom: 5,

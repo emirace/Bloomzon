@@ -2,12 +2,15 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { MaterialIcons, AntDesign, Entypo } from "@expo/vector-icons";
 import React from "react";
 
-const Episodes = ({ video }) => {
+const Episodes = ({ video, setEpisode }) => {
   return (
     <View style={styles.episodeList}>
-      {video.episodes.map((episode) => (
+      {video.Episodes.map((episode) => (
         <View key={episode.id} style={styles.episodeContainer}>
-          <TouchableOpacity style={styles.episodePlayButton}>
+          <TouchableOpacity
+            style={styles.episodePlayButton}
+            onPress={() => setEpisode(episode)}
+          >
             <MaterialIcons name="play-arrow" size={24} color="#ffffff" />
           </TouchableOpacity>
           <View style={styles.episodeInfo}>

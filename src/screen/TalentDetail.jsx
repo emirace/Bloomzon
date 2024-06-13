@@ -20,6 +20,7 @@ import Episodes from "../components/tabs/Episodes";
 import More from "../components/tabs/More";
 import { getVideo } from "../services/video";
 import StarRating from "../components/StarRating";
+import { Video, ResizeMode } from "expo-av";
 
 const iconData = [
   { id: "1", name: "replay", library: MaterialIcons, label: "Start over" },
@@ -40,8 +41,11 @@ const TalentDetail = ({ route, navigation }) => {
   const { id } = route.params;
   const [activeTab, setActiveTab] = useState("Episodes");
   const [video, setVideo] = useState(null);
+  const [episode, setEpisode] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedEpisode, setSelectedEpisode] = useState(1);
+  const [status, setStatus] = useState({});
+
+  const videoRef = React.useRef(null);
 
   useEffect(() => {
     const fetchVideo = async () => {
@@ -50,6 +54,7 @@ const TalentDetail = ({ route, navigation }) => {
         setLoading(true);
         const data = await getVideo(id);
         setVideo(data);
+        setEpisode(data.Episodes[0]);
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -74,103 +79,158 @@ const TalentDetail = ({ route, navigation }) => {
     <View style={{ flex: 1 }}>
       <Header navigation={navigation} />
       <ScrollView style={styles.container}>
-        {loading && <ActivityIndicator />}
-        {!video && <Text>No video</Text>}
-        <View style={styles.header}>
-          <Text style={styles.title}>{video.title}</Text>
-        </View>
+        {loading ? (
+          <ActivityIndicator />
+        ) : !video ? (
+          <Text>No video</Text>
+        ) : (
+          <>
+            <View style={styles.header}>
+              {!episode ? (
+                <View
+                  style={[
+                    styles.header,
+                    { justifyContent: "center", alignItems: "center" },
+                  ]}
+                >
+                  <Text style={styles.title}>{video.title}</Text>
+                  <ActivityIndicator />
+                </View>
+              ) : (
+                <Video
+                  source={{ uri: episode.video_url }}
+                  ref={videoRef}
+                  resizeMode={ResizeMode.CONTAIN}
+                  onError={(e) => console.log(e)}
+                  useNativeControls
+                  isLooping
+                  onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+                  style={styles.video}
+                />
+              )}
+            </View>
 
-        <View style={styles.seasonContainer}>
-          <Text style={styles.seasonText}>Season {video.season_number}</Text>
-          <AntDesign name="down" size={16} color="black" />
-        </View>
+            <View style={styles.seasonContainer}>
+              <Text style={styles.seasonText}>
+                Season {video.season_number}
+              </Text>
+              <AntDesign name="down" size={16} color="black" />
+            </View>
 
-        <View style={styles.includeContainer}>
-          <AntDesign name="checkcircle" size={16} color="#00BCD4" />
-          <Text style={styles.includeText}>Include with Elite</Text>
-        </View>
+            <View style={styles.includeContainer}>
+              <AntDesign name="checkcircle" size={16} color="#00BCD4" />
+              <Text style={styles.includeText}>Include with Elite</Text>
+            </View>
 
-        <TouchableOpacity style={styles.playButton}>
-          <MaterialIcons name="play-arrow" size={24} color="white" />
-          <Text style={styles.playButtonText}>
-            Play S{video.season_number} E{selectedEpisode}
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.downloadButton}>
-          <AntDesign name="download" size={24} color="#ef7204" />
-          <Text style={styles.downloadButtonText}>
-            Download Season {video.season_number}
-          </Text>
-        </TouchableOpacity>
-
-        <FlatList
-          data={iconData}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.iconRow}
-        />
-
-        <Text style={styles.description}>{video.description}</Text>
-
-        <View style={styles.ratingContainer}>
-          <StarRating rating={4} />
-          <AntDesign name="star" size={16} color="#FFA500" />
-          <AntDesign name="star" size={16} color="#FFA500" />
-          <AntDesign name="star" size={16} color="#FFA500" />
-          <AntDesign name="star" size={16} color="#FFA500" />
-          <AntDesign name="star" size={16} color="#FFA500" />
-          <Text style={styles.reviewCount}>(173)</Text>
-        </View>
-
-        <View style={styles.tagsContainer}>
-          <Text style={styles.tag}>13+</Text>
-          <Text style={styles.tag}>UHD</Text>
-          <Text style={styles.tag}>X-RAY</Text>
-          <Text style={styles.tag}>HDR</Text>
-        </View>
-
-        <Text style={styles.languageText}>
-          Languages: Audio (5), Subtitles (33)
-        </Text>
-        <View style={styles.categoryContainer}>
-          <TouchableOpacity style={styles.categoryButton}>
-            <Text style={styles.categoryText}>Unscripted</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.categoryButton}>
-            <Text style={styles.categoryText}>Special Interest</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.tabContainer}>
-          <TouchableOpacity
-            onPress={() => setActiveTab("Episodes")}
-            style={[styles.tab, activeTab === "Episodes" && styles.activeTab]}
-          >
-            <Text
+            <TouchableOpacity
               style={[
-                styles.tabText,
-                activeTab === "Episodes" && styles.activeTab,
+                styles.playButton,
+                !episode && { backgroundColor: "gray" },
               ]}
+              onPress={() =>
+                !episode
+                  ? null
+                  : status.isPlaying
+                  ? videoRef.current.pauseAsync()
+                  : videoRef.current.playAsync()
+              }
             >
-              Episodes (10)
+              {!episode ? (
+                <Text style={styles.playButtonText}>No episode</Text>
+              ) : (
+                <>
+                  <MaterialIcons
+                    name={status.isPlaying ? "pause" : "play-arrow"}
+                    size={24}
+                    color="white"
+                  />
+                  <Text style={styles.playButtonText}>
+                    {status.isPlaying ? "Pause" : "Play"} S
+                    {episode.season_number} E{episode.episode_number}
+                  </Text>
+                </>
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.downloadButton}>
+              <AntDesign name="download" size={24} color="#ef7204" />
+              <Text style={styles.downloadButtonText}>
+                Download Season {video.season_number}
+              </Text>
+            </TouchableOpacity>
+
+            <FlatList
+              data={iconData}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.iconRow}
+            />
+
+            <Text style={styles.description}>{video.description}</Text>
+
+            <View style={styles.ratingContainer}>
+              <StarRating rating={video.rating} />
+              <Text style={styles.reviewCount}>(173)</Text>
+            </View>
+
+            <View style={styles.tagsContainer}>
+              <Text style={styles.tag}>13+</Text>
+              <Text style={styles.tag}>UHD</Text>
+              <Text style={styles.tag}>X-RAY</Text>
+              <Text style={styles.tag}>HDR</Text>
+            </View>
+
+            <Text style={styles.languageText}>
+              Languages: Audio (5), Subtitles (33)
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setActiveTab("More")}
-            style={[styles.tab, activeTab === "More" && styles.activeTab]}
-          >
-            <Text
-              style={[styles.tabText, activeTab === "More" && styles.activeTab]}
-            >
-              More details
-            </Text>
-          </TouchableOpacity>
-        </View>
-        {activeTab === "Episodes" && <Episodes video={video} />}
-        {activeTab === "More" && <More video={video} />}
+            <View style={styles.categoryContainer}>
+              <TouchableOpacity style={styles.categoryButton}>
+                <Text style={styles.categoryText}>Unscripted</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.categoryButton}>
+                <Text style={styles.categoryText}>Special Interest</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.tabContainer}>
+              <TouchableOpacity
+                onPress={() => setActiveTab("Episodes")}
+                style={[
+                  styles.tab,
+                  activeTab === "Episodes" && styles.activeTab,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.tabText,
+                    activeTab === "Episodes" && styles.activeTab,
+                  ]}
+                >
+                  Episodes ({video.Episodes.length})
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setActiveTab("More")}
+                style={[styles.tab, activeTab === "More" && styles.activeTab]}
+              >
+                <Text
+                  style={[
+                    styles.tabText,
+                    activeTab === "More" && styles.activeTab,
+                  ]}
+                >
+                  More details
+                </Text>
+              </TouchableOpacity>
+            </View>
+            {activeTab === "Episodes" && (
+              <Episodes video={video} setEpisode={setEpisode} />
+            )}
+            {activeTab === "More" && <More video={video} />}
+          </>
+        )}
       </ScrollView>
     </View>
   );
@@ -186,10 +246,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#94e9f4",
     borderRadius: 10,
     height: 230,
-    justifyContent: "center",
-    alignItems: "center",
     marginBottom: 16,
   },
+  video: { height: 230, borderRadius: 10 },
   title: {
     fontSize: 45,
     fontWeight: "600",
