@@ -2,8 +2,9 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screen/Home";
-import TalentCatch from "./screen/TalentCatch";
-import TalentDetail from "./screen/TalentDetail";
+import TalentCatch from "./screen/talentCatch";
+import TalentDetail from "./screen/talentCatch/TalentDetail";
+import TalentStore from "./screen/talentStore";
 
 const Stack = createNativeStackNavigator();
 
@@ -14,6 +15,7 @@ function Main() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="TalentCatch" component={TalentCatch} />
         <Stack.Screen name="TalentDetail" component={TalentDetail} />
+        <Stack.Screen name="TalentStore" component={TalentStore} />
       </Stack.Navigator>
     </NavigationContainer>
   );

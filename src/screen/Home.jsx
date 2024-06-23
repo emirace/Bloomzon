@@ -34,7 +34,10 @@ const Home = ({ navigation }) => {
           <Text style={styles.buttonText}> Talent Catch</Text>
         </TouchableOpacity>
         <View style={styles.divider} />
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.push("TalentStore")}
+        >
           <Text style={styles.buttonText}>View Bloomzon</Text>
           <Text style={styles.buttonText}> Talent Store</Text>
         </TouchableOpacity>

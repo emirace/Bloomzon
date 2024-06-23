@@ -14,12 +14,12 @@ import {
   Ionicons,
   Feather,
 } from "@expo/vector-icons";
-import Header from "../components/Header";
+import Header from "../../components/Header";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Episodes from "../components/tabs/Episodes";
-import More from "../components/tabs/More";
-import { getVideo } from "../services/video";
-import StarRating from "../components/StarRating";
+import Episodes from "../../components/tabs/Episodes";
+import More from "../../components/tabs/More";
+import { getVideo } from "../../services/video";
+import StarRating from "../../components/StarRating";
 import { Video, ResizeMode } from "expo-av";
 
 const iconData = [

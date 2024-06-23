@@ -4,18 +4,13 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  TextInput,
   StyleSheet,
-  StatusBar,
-  Platform,
   Dimensions,
   ActivityIndicator,
 } from "react-native";
-import SearchInput from "../components/SearchInput";
-import Header from "../components/Header";
+import Header from "../../components/Header";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { getVideos } from "../services/video";
-import StarRating from "../components/StarRating";
+import { getVideos } from "../../services/video";
 
 const TalentCatchScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");

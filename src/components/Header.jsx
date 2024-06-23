@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: STATUSBAR_HEIGHT,
     backgroundColor: "#94e9f4",
+    zIndex: 20,
   },
   searchContainer: {
     flexDirection: "row",
