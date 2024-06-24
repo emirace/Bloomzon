@@ -53,7 +53,7 @@ const Fashion = () => {
 
   const renderProduct = ({ item }) => (
     <View style={{ marginRight: 10 }}>
-      <Product />
+      <Product image={require("../../../assets/product2.jpg")} />
     </View>
   );
 
@@ -189,7 +189,10 @@ const Fashion = () => {
 
         <View style={styles.scrollViewContainer}>
           {products.map((item, index) => (
-            <Product key={index.toString()} />
+            <Product
+              image={require("../../../assets/product1.jpg")}
+              key={index.toString()}
+            />
           ))}
         </View>
       </View>
@@ -215,11 +218,14 @@ const Fashion = () => {
         </Text>
         <View style={styles.scrollViewContainer}>
           {products.map((item, index) => (
-            <Product key={index.toString()} />
+            <Product
+              image={require("../../../assets/product2.jpg")}
+              key={index.toString()}
+            />
           ))}
         </View>
       </View>
-      <ProductCard />
+      <ProductCard image={require("../../../assets/product-card.jpg")} />
 
       <View style={{ marginTop: 5, backgroundColor: "#fff", padding: 15 }}>
         <Text
@@ -233,11 +239,14 @@ const Fashion = () => {
         </Text>
         <View style={styles.scrollViewContainer}>
           {products.map((item, index) => (
-            <Product key={index.toString()} />
+            <Product
+              image={require("../../../assets/product2.jpg")}
+              key={index.toString()}
+            />
           ))}
         </View>
       </View>
-      <ProductCard />
+      <ProductCard image={require("../../../assets/product-card3.jpg")} />
 
       <View style={{ marginTop: 5, backgroundColor: "#fff", padding: 15 }}>
         <Text
@@ -283,7 +292,10 @@ const Fashion = () => {
         </Text>
         <View style={styles.scrollViewContainer}>
           {products.map((item, index) => (
-            <Product key={index.toString()} />
+            <Product
+              image={require("../../../assets/product1.jpg")}
+              key={index.toString()}
+            />
           ))}
         </View>
       </View>

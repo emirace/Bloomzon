@@ -2,14 +2,11 @@ import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-const ProductCard = () => {
+const ProductCard = ({ image }) => {
   return (
     <View style={styles.container}>
       <View>
-        <Image
-          source={require("../../../assets/product-card.jpg")}
-          style={styles.topImage}
-        />
+        <Image source={image} style={styles.topImage} />
         <TouchableOpacity style={styles.muteButton}>
           <Ionicons name="volume-mute-outline" size={24} color="white" />
         </TouchableOpacity>

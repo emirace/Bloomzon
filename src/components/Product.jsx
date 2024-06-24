@@ -15,15 +15,11 @@ const itemWidth = (width - 40) / 2;
 
 const colors = ["green", "blue", "purple"];
 
-const Product = () => {
+const Product = ({ image }) => {
   const [selectedColor, setSelectedColor] = useState("green");
   return (
     <View style={[styles.productCont, { width: itemWidth }]}>
-      <Image
-        source={require("../../assets/fashion3.jpg")}
-        style={styles.productImage}
-        resizeMode="cover"
-      />
+      <Image source={image} style={styles.productImage} resizeMode="cover" />
       <View style={styles.color}>
         {colors.map((color) => (
           <TouchableOpacity
