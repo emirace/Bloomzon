@@ -8,9 +8,9 @@ import {
 } from "react-native";
 import React from "react";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
-import Product from "../../components/Product";
-import ClimatePledgeFriendly from "../../components/fashion/ClimatePledgeFriendly";
-import ProductCard from "../../components/fashion/ProductCard";
+import Product from "../Product";
+import ClimatePledgeFriendly from "../fashion/ClimatePledgeFriendly";
+import ProductCard from "../fashion/ProductCard";
 
 const { width } = Dimensions.get("screen");
 const selects = ["Price & Details", "Brands", "Category", "Sizes", "Color"];
@@ -23,14 +23,23 @@ const fashionStylists = [
   { image: require("../../../assets/fashion3.jpg"), text: "Dress" },
   { image: require("../../../assets/fashion4.jpg"), text: "Gown" },
 ];
-const popular = ["Shirt", "Pants", "Coat", "SweatShirt", "Skirt", "Others"];
+const popular = [
+  "Shirt",
+  "Pants",
+  "Coat",
+  "SweatShirt",
+  "Skirt",
+  "Gown",
+  "Others",
+];
 const products = [1, 2, 3, 4, 5, 6];
 const brands = [
   { name: "OFEEFAN", description: "OFEEFAN spaghetti strap Maxi dress" },
   { name: "OFEEFAN", description: "OFEEFAN spaghetti strap Maxi dress" },
+  { name: "OFEEFAN", description: "OFEEFAN spaghetti strap Maxi dress" },
 ];
 
-const Fashion = () => {
+const Fashion = ({ navigation }) => {
   const renderFilter = ({ item }) => (
     <View style={styles.selectCont}>
       <Text style={styles.selectText}>{item}</Text>
@@ -53,7 +62,11 @@ const Fashion = () => {
 
   const renderProduct = ({ item }) => (
     <View style={{ marginRight: 10 }}>
-      <Product image={require("../../../assets/product2.jpg")} />
+      <Product
+        width={0.4 * width}
+        navigation={navigation}
+        image={require("../../../assets/product2.jpg")}
+      />
     </View>
   );
 
@@ -190,6 +203,7 @@ const Fashion = () => {
         <View style={styles.scrollViewContainer}>
           {products.map((item, index) => (
             <Product
+              navigation={navigation}
               image={require("../../../assets/product1.jpg")}
               key={index.toString()}
             />
@@ -219,6 +233,7 @@ const Fashion = () => {
         <View style={styles.scrollViewContainer}>
           {products.map((item, index) => (
             <Product
+              navigation={navigation}
               image={require("../../../assets/product2.jpg")}
               key={index.toString()}
             />
@@ -240,6 +255,7 @@ const Fashion = () => {
         <View style={styles.scrollViewContainer}>
           {products.map((item, index) => (
             <Product
+              navigation={navigation}
               image={require("../../../assets/product2.jpg")}
               key={index.toString()}
             />
@@ -293,6 +309,7 @@ const Fashion = () => {
         <View style={styles.scrollViewContainer}>
           {products.map((item, index) => (
             <Product
+              navigation={navigation}
               image={require("../../../assets/product1.jpg")}
               key={index.toString()}
             />
@@ -349,7 +366,7 @@ const styles = StyleSheet.create({
   image: { width: 0.15 * width, height: 50 },
   fashionStyleText: { fontSize: 16, fontWeight: "500" },
   stylistItemCont: { marginRight: 10, alignItems: "center" },
-  stylistImage: { width: 130, height: 150 },
+  stylistImage: { width: 115, height: 150 },
   stylistText: { marginTop: 5, color: "gray" },
   scrollViewContainer: {
     flexDirection: "row",

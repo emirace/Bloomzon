@@ -1,14 +1,9 @@
-import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import Header from "../../components/Header";
 import { Ionicons } from "@expo/vector-icons";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import Fashion from "./Fashion";
-import Invention from "./Invention";
 import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
-
-const Tab = createMaterialTopTabNavigator();
-const { width } = Dimensions.get("screen");
+import Fashion from "../../components/store/Fashion";
 
 const TalentStore = ({ navigation }) => {
   return (
@@ -21,12 +16,12 @@ const TalentStore = ({ navigation }) => {
       >
         <Tabs.Tab name="Fashion">
           <Tabs.ScrollView>
-            <Fashion />
+            <Fashion navigation={navigation} />
           </Tabs.ScrollView>
         </Tabs.Tab>
         <Tabs.Tab name="Invention">
           <Tabs.ScrollView>
-            <Invention />
+            <View />
           </Tabs.ScrollView>
         </Tabs.Tab>
       </Tabs.Container>

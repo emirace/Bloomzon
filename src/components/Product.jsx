@@ -10,16 +10,23 @@ import React, { useState } from "react";
 import StarRating from "./StarRating";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
-const { width } = Dimensions.get("window");
-const itemWidth = (width - 40) / 2;
+const { width: WIDTH } = Dimensions.get("window");
+const itemWidth = (WIDTH - 40) / 2;
 
 const colors = ["green", "blue", "purple"];
 
-const Product = ({ image }) => {
+const Product = ({ image, navigation, width }) => {
   const [selectedColor, setSelectedColor] = useState("green");
   return (
-    <View style={[styles.productCont, { width: itemWidth }]}>
-      <Image source={image} style={styles.productImage} resizeMode="cover" />
+    <TouchableOpacity
+      onPress={() => navigation.push("Product")}
+      style={[styles.productCont, { width: width ? width : itemWidth }]}
+    >
+      <Image
+        source={image}
+        style={[styles.productImage, width && { width }]}
+        resizeMode="cover"
+      />
       <View style={styles.color}>
         {colors.map((color) => (
           <TouchableOpacity
@@ -81,7 +88,7 @@ const Product = ({ image }) => {
           <MaterialIcons name="add-shopping-cart" size={18} color="black" />
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
