@@ -11,6 +11,8 @@ import { AntDesign, Ionicons } from "@expo/vector-icons";
 import Product from "../Product";
 import ClimatePledgeFriendly from "../fashion/ClimatePledgeFriendly";
 import ProductCard from "../fashion/ProductCard";
+import BottomSheetComponent from "../modals/BottomSheetComponent";
+import Sponsored from "./Sponsored";
 
 const { width } = Dimensions.get("screen");
 const selects = ["Price & Details", "Brands", "Category", "Sizes", "Color"];
@@ -167,10 +169,17 @@ const Fashion = ({ navigation }) => {
           <Text style={styles.filter}>
             Shop the PrettyGarden Store on Bloomzon
           </Text>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-            <Text style={{ fontSize: 14, color: "gray" }}>Sponsored</Text>
-            <Ionicons name="information-circle" size={18} color="gray" />
-          </View>
+          <BottomSheetComponent
+            button={
+              <View
+                style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
+              >
+                <Text style={{ fontSize: 14, color: "gray" }}>Sponsored</Text>
+                <Ionicons name="information-circle" size={18} color="gray" />
+              </View>
+            }
+            content={<Sponsored />}
+          />
         </View>
       </View>
 

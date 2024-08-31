@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
   },
   image: {
     width,
-    height: 300,
+    height: 200,
   },
   detailsContainer: {
     padding: 20,

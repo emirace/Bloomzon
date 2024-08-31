@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
   FlatList,
+  Pressable,
 } from "react-native";
 import Header from "../../../components/Header";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
@@ -202,25 +203,184 @@ const Product = ({ navigation }) => {
     bottomSheetRef.current?.present();
   }, []);
 
-  return (
-    <>
-      <Header navigation={navigation} />
-      <ScrollView style={styles.container}>
-        <View style={styles.mediaContainer}>
-          {/* Video placeholder */}
-          <Image
-            style={styles.image}
-            source={require("../../../../assets/product2.jpg")}
-          />
-          {selectedOption === "Video" && (
+  const renderImageArea = () => {
+    switch (selectedOption) {
+      case "Video":
+        return (
+          <View style={styles.mediaContainer}>
+            {/* Video placeholder */}
+            <Image
+              style={styles.image}
+              source={require("../../../../assets/product2.jpg")}
+            />
             <AntDesign
               name="playcircleo"
               size={50}
               color="white"
               style={{ position: "absolute" }}
             />
-          )}
-        </View>
+          </View>
+        );
+      case "Photos":
+        return (
+          <View style={styles.mediaContainer}>
+            {/* Video placeholder */}
+            <Image
+              style={styles.image}
+              source={require("../../../../assets/product2.jpg")}
+            />
+            <View
+              style={{
+                position: "absolute",
+                bottom: 10,
+                left: 10,
+                backgroundColor: "gray",
+                padding: 5,
+                borderRadius: 15,
+              }}
+            >
+              <Text style={{ color: "white" }}>1/7</Text>
+            </View>
+          </View>
+        );
+      case "Reviews":
+        return (
+          <View style={[styles.mediaContainer, { backgroundColor: "white" }]}>
+            <View
+              style={{
+                padding: 16,
+                backgroundColor: "#f0eded",
+                margin: 16,
+                borderRadius: 8,
+              }}
+            >
+              <Text style={[styles.reviewsCount, { marginBottom: 8 }]}>
+                {" "}
+                Imobighe
+              </Text>
+
+              <View style={styles.ratingContainer}>
+                <Text style={styles.rating}>★★★★★</Text>
+                <Text style={{ color: "#ffa500" }}>Verified Purchase</Text>
+              </View>
+              <Text style={{ fontSize: 16 }}>
+                Amazing product and honestly great communication, great
+                communication, i have talked to other supplier and none have
+                been as smooth as...
+              </Text>
+            </View>
+            <Pressable
+              style={{
+                borderWidth: 1,
+                borderRadius: 10,
+                padding: 4,
+                borderColor: "#e1e1e1",
+                marginBottom: 15,
+              }}
+            >
+              <Text style={{ color: "gray" }}>See all reviews</Text>
+            </Pressable>
+          </View>
+        );
+      case "Highlights":
+        return (
+          <View
+            style={[
+              styles.mediaContainer,
+              { backgroundColor: "white", paddingHorizontal: 15 },
+            ]}
+          >
+            <View
+              style={{
+                padding: 16,
+                backgroundColor: "#f0eded",
+                margin: 16,
+                borderRadius: 8,
+                width: "100%",
+              }}
+            >
+              <Text
+                style={{ fontSize: 16, fontWeight: "500", marginBottom: 8 }}
+              >
+                On-time Dispatch Guarantee
+              </Text>
+              <Text style={[styles.reviewsCount, { marginBottom: 8 }]}>
+                Claim compansetion for delay dispatch
+              </Text>
+              <View
+                style={{
+                  borderTopColor: "#e1e1e1",
+                  borderTopWidth: 1,
+                  paddingTop: 10,
+                  marginTop: 10,
+                }}
+              >
+                <Text
+                  style={{ fontSize: 16, fontWeight: "500", marginBottom: 8 }}
+                >
+                  Payment
+                </Text>
+
+                <Text style={[styles.reviewsCount, { marginBottom: 8 }]}>
+                  Enjoy encrypted and secure payments
+                </Text>
+              </View>
+            </View>
+            <Pressable
+              style={{
+                borderWidth: 1,
+                borderRadius: 10,
+                padding: 4,
+                borderColor: "#e1e1e1",
+                marginBottom: 15,
+              }}
+            >
+              <Text style={{ color: "gray" }}>See all reviews</Text>
+            </Pressable>
+          </View>
+        );
+
+      case "Gallery":
+        return (
+          <View style={[styles.mediaContainer, { backgroundColor: "white" }]}>
+            <View style={{ flexDirection: "row", paddingVertical: 16 }}>
+              <Image
+                style={{ width: 100, height: 150 }}
+                source={require("../../../../assets/product2.jpg")}
+              />
+              <Image
+                style={{ width: 100, height: 150 }}
+                source={require("../../../../assets/product2.jpg")}
+              />
+              <Image
+                style={{ width: 100, height: 150 }}
+                source={require("../../../../assets/product2.jpg")}
+              />
+            </View>
+
+            <Pressable
+              style={{
+                borderWidth: 1,
+                borderRadius: 10,
+                padding: 4,
+                borderColor: "#e1e1e1",
+                marginBottom: 15,
+              }}
+            >
+              <Text style={{ color: "gray" }}>See all products gallery</Text>
+            </Pressable>
+          </View>
+        );
+      default:
+        break;
+    }
+  };
+
+  return (
+    <>
+      <Header navigation={navigation} />
+      <ScrollView style={styles.container}>
+        {renderImageArea()}
         <View
           style={{
             alignItems: "center",
